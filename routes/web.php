@@ -10,7 +10,16 @@
 | contains the "web" middleware group. Now create something great!
 |
 */
+use Illuminate\Http\Request;
+Route::get('/', function (Request $req ) {
+    return view('pages.index');
+});
 
-Route::get('/', function () {
-    return view('welcome');
+Route::post('/', function(Request $req )
+{
+	$url_post = $req->get('url');
+	// Valider url
+	// Verifier si l'url a deja été  raccourcie si oui la retourner tout de suite
+	// sinon créer une nouvelle short url et la retourner
+	dd($url_post);
 });
