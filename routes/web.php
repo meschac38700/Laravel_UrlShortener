@@ -21,7 +21,7 @@ Route::post('/', function(Request $req )
 {
 	$url_post = $req->get('url');
 	// Valider url
-	$validation = Validator::make(['url'=>$url_post], ['url'=>'required|url' ])->validate();
+	$validation = Validator::make(['url'=>$url_post], ['url'=>'required|url' ])->validate();// validate valide les données si echec redirige vers la page précédente
 	/*if( $validation ->fails() )
 	{
 		dd('Failed');
