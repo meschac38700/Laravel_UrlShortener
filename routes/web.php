@@ -12,7 +12,7 @@
 */
 use Illuminate\Http\Request;
 use App\Url;
-
+use App\Utilities\Regex;
 Route::get('/', function (Request $req ) {
     return view('pages.index');
 });
@@ -20,38 +20,46 @@ Route::get('/', function (Request $req ) {
 Route::post('/', function(Request $req )
 {
 	$url_post = $req->get('url');
-	// Valider url
-	$validation = Validator::make(['url'=>$url_post], ['url'=>'required|url' ])->validate();// validate valide les données si echec redirige vers la page précédente
-	/*if( $validation ->fails() )
-	{
-		dd('Failed');
-	}*/
-	// Verifier si l'url a deja été  raccourcie si oui la retourner tout de suite
-	$url_exist = Url::where('original_url', $url_post )->first();
-	if( $url_exist )
-	{
-		return view('pages.result')->withUrlExist($url_exist);
-	}
 	
-	// sinon créer une nouvelle short url et la retourner
-	try
+	// Valider url
+	if( Regex::valideUrl($url_post) )
 	{
-		$new_url = Url::create([
-				'original_url'  => $url_post,
-				'shortened_url' =>  Url::getUniqueShortUrl()
-		]);
+		/*$validation = Validator::make(['url'=>$url_post], ['url'=>'required|url' ])->validate();*/// validate valide les données si echec redirige vers la page précédente
+		/*if( $validation ->fails() )
+		{
+			dd('Failed');
+		}*/
+		// Verifier si l'url a deja été  raccourcie si oui la retourner tout de suite
+		$url_exist = Url::where('original_url', $url_post )->first();
+		if( $url_exist )
+		{
+			return view('pages.result')->withUrlExist($url_exist);
+		}
+		
+		// sinon créer une nouvelle short url et la retourner
+		try
+		{
+			$new_url = Url::create([
+					'original_url'  => $url_post,
+					'shortened_url' =>  Url::getUniqueShortUrl()
+			]);
 
-		return view('pages.result')->withUrlExist($new_url);
+			return view('pages.result')->withUrlExist($new_url);
 
+		}
+		catch(\Exception $e)
+		{
+			$error = [
+				"http_response_code" => 500,
+				"response" => false,
+				"comment" => "Error to create a shortened url ! please try again "
+			];
+			return view('pages.error', compact("error"));
+		}
 	}
-	catch(\Exception $e)
+	else
 	{
-		$error = [
-			"http_response_code" => 500,
-			"response" => false,
-			"comment" => "Error to create a shortened url ! please try again "
-		];
-		return view('pages.error', compact("error"));
+		return redirect()->back();
 	}
 });
 

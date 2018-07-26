@@ -13,6 +13,5 @@
 		<input type="text" name="url" value="{{ old('url') }}" placeholder="Enter your original URL here">
 		<input type="submit" name="Shorten URL">
 	</form>
-
 @stop
 
