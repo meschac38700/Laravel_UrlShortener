@@ -11,7 +11,7 @@
 		{{-- <input type="hidden" name="_token" value="{{ csrf_token() }}"> --}}
 		{!!$errors->first('message', '<p class="error-msg">:message</p>')!!}
 		<input type="text" name="url" value="{{ isset($errors) ? $errors->first('url') : old('url') }}" placeholder="Enter your original URL here">
-		<input type="submit" name="Shorten URL">
+		<input type="submit" value="Shorten URL" name="post_form">
 	</form>
 @stop
 

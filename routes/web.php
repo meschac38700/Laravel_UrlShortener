@@ -24,11 +24,6 @@ Route::post('/', function(Request $req )
 	// Valider url
 	if( Regex::validUrl($url_post) )
 	{
-		/*$validation = Validator::make(['url'=>$url_post], ['url'=>'required|url' ])->validate();*/// validate valide les données si echec redirige vers la page précédente
-		/*if( $validation ->fails() )
-		{
-			dd('Failed');
-		}*/
 		// Verifier si l'url a deja été  raccourcie si oui la retourner tout de suite
 		$url_exist = Url::where('original_url', $url_post )->first();
 		if( $url_exist )
@@ -59,11 +54,16 @@ Route::post('/', function(Request $req )
 	}
 	else
 	{
+		$msg_error = Regex::replaceAttributeTextToFieldName(
+							Lang::get('validation')['url'],
+							'url',
+							$url_post
+					);
 		$error = [
-				"http_response_code" => 401,
-				"message" => "This url '".$url_post."' is not valid !", // message d'erreur
-				"url" => $url_post // afin de remplir le champs url
-			];
+			"http_response_code" => 401,
+			"message" => $msg_error, // message d'erreur
+			"url" => $url_post // afin de remplir le champs url
+		];
 		return view('pages.index')->withErrors((object) $error);
 	}
 });
