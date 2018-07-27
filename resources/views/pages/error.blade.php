@@ -3,5 +3,8 @@
 @section('head_title', "Error Server")
 
 @section('content')
-	{{ json_encode( $error ) }}
+	<?php dump( $error )?> 
+	<p>
+		<a href="index">Retour</a>
+	</p>
 @stop

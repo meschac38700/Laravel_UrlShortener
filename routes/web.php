@@ -22,7 +22,7 @@ Route::post('/', function(Request $req )
 	$url_post = $req->get('url');
 	
 	// Valider url
-	if( Regex::valideUrl($url_post) )
+	if( Regex::validUrl($url_post) )
 	{
 		/*$validation = Validator::make(['url'=>$url_post], ['url'=>'required|url' ])->validate();*/// validate valide les données si echec redirige vers la page précédente
 		/*if( $validation ->fails() )
@@ -59,9 +59,16 @@ Route::post('/', function(Request $req )
 	}
 	else
 	{
-		return redirect()->back();
+		$error = [
+				"http_response_code" => 401,
+				"message" => "This url '".$url_post."' is not valid !", // message d'erreur
+				"url" => $url_post // afin de remplir le champs url
+			];
+		return view('pages.index')->withErrors((object) $error);
 	}
 });
+
+
 
 Route::get('/{shortUrl}', function( $shortUrl)
 {
