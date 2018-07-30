@@ -13,7 +13,7 @@ class Regex
 	 */
 	public static function validUrl( $p_url )
 	{
-		$pattern = "%((https?|ftp):\/\/)?(www\.)?[a-z$&?=\*\+\/_-]+\.[a-z]{2,3}(\/[a-z0-9\/\?=&_-]+)?%i";
+		$pattern = "%((https?|ftp):\/\/)?(www\.)?[a-z0-9$&?=\*\+\/_-]+\.[a-z]{2,3}(\/[a-z0-9\/\?=&_-]+)?%i";
 
 		$valid = preg_match($pattern, $p_url, $matches);
 		// Si on matche quelque chose dans l'url donnée

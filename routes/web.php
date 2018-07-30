@@ -11,8 +11,8 @@
 |
 */
 
-Route::get('/', "UrlsController@create");
-Route::post('/', "UrlsController@store");
+Route::name('root_path')->get('/', "UrlsController@create");
+Route::name('createUrlShortened_path')->post('/', "UrlsController@store");
 
-Route::get('/{shortUrl}', "UrlsController@show");
+Route::name('result_path')->get('/{shortUrl}', "UrlsController@show");
 
