@@ -66,11 +66,9 @@ class UrlsController extends Controller
     public function show( Request $req, $shortUrl )
     {
     	//request sql search shortUrl to the DB
-		$url = Url::whereShortenedUrl($shortUrl)->first();
-		if( !$url )
-		{
-			return redirect('/');
-		}
+    	// throw exception that is manage in file App\Exceptions\Handler.php
+		$url = Url::whereShortenedUrl($shortUrl)->firstOrFail();
+		
 		return redirect($url->original_url);
     }
 }
