@@ -44,13 +44,13 @@ class UrlsController extends Controller
 					"response" => false,
 					"comment" => "Error to create a shortened url ! please try again "
 				];
-				return view('pages.error', compact("error"));
+				return redirect('pages.error', compact("error"));
 			}
 		}
 		else
 		{
 			$msg_error = Regex::replaceAttributeTextToFieldName(
-								Lang::get('validation')['url'],
+								\Lang::get('validation')['url'],
 								'url',
 								$url_post
 						);
@@ -59,7 +59,7 @@ class UrlsController extends Controller
 				"message" => $msg_error, // message d'erreur
 				"url" => $url_post // afin de remplir le champs url
 			];
-			return view('pages.index')->withErrors((object) $error);
+			return redirect()->back()->withErrors((object) $error);
 		}
     }
 
