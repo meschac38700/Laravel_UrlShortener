@@ -19,13 +19,5 @@ class Url extends Model
 		}
 		return $shortened;
 	}
-	/**
-	 * [valideURL description]
-	 * @param  [string] $p_url [url to valid]
-	 * @return [boolean]        [url is valide true else false]
-	 */
-	public static function validURL( $p_url )
-	{
-		
-	}
+	
 }

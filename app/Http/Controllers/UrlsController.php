@@ -19,33 +19,9 @@ class UrlsController extends Controller
 		// Valider url
 		if( Regex::validUrl($url_post) )
 		{
-			// Verifier si l'url a deja été  raccourcie si oui la retourner tout de suite
-			$url_exist = Url::where('original_url', $url_post )->first();
-			if( $url_exist )
-			{
-				return view('pages.result')->withUrlExist($url_exist);
-			}
 			
-			// sinon créer une nouvelle short url et la retourner
-			try
-			{
-				$new_url = Url::create([
-						'original_url'  => $url_post,
-						'shortened_url' =>  Url::getUniqueShortUrl()
-				]);
-
-				return view('pages.result')->withUrlExist($new_url);
-
-			}
-			catch(\Exception $e)
-			{
-				$error = [
-					"http_response_code" => 500,
-					"response" => false,
-					"comment" => "Error to create a shortened url ! please try again "
-				];
-				return redirect('pages.error', compact("error"));
-			}
+			$new_url =$this->getRecordForUrl( $url_post );
+			return view('pages.result')->withUrlExist($new_url);
 		}
 		else
 		{
@@ -70,5 +46,33 @@ class UrlsController extends Controller
 		$url = Url::whereShortenedUrl($shortUrl)->firstOrFail();
 		
 		return redirect($url->original_url);
+    }
+
+    /**
+     * [getRecordForUrl description]
+     * Verifier si l'url a deja été  raccourcie si oui la retourner tout de suite
+     * sinon créer une nouvelle short url et la retourner
+     * @param  [type] $p_url [description]
+     * @return [type]        [description]
+     */
+    private function getRecordForUrl( $p_url )
+    {
+    	try
+		{
+			// firstOrCreate(array(condition), array(paramForCreation)) 
+			return Url::firstOrCreate( 
+									   [ "original_url"=>$p_url ], 
+									   [ "shortened_url"=>Url::getUniqueShortUrl() ]
+									 );
+		}
+		catch(\Exception $e)
+		{
+			$error = [
+				"http_response_code" => 500,
+				"response" => false,
+				"comment" => "Error to create a shortened url ! please try again "
+			];
+			return redirect('pages.error', compact("error"));
+		}
     }
 }
