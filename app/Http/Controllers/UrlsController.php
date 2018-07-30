@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use App\Url;
 use App\Utilities\Regex;
 use Illuminate\Http\Request;
